@@ -8,6 +8,9 @@
 
 ####### nodejs
 
+# Build output
+lib/
+
 # Logs
 logs
 *.log
