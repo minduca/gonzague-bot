@@ -1,16 +1,20 @@
 import * as restify from 'restify';
-import { GonzagueBot } from './bot';
+import { GonzagueBot } from './gonzagueBot';
 import { configDotenv } from './dotenvLoader';
 import { BotFrameworkAdapterFactory } from './botFrameworkAdapterFactory';
+import { MemoryStorage, ConversationState, UserState } from 'botbuilder';
 
 configDotenv();
 
-const adapter = new BotFrameworkAdapterFactory().createAdapter({
+const memoryStorage = new MemoryStorage();
+const conversationState = new ConversationState(memoryStorage);
+const userState = new UserState(memoryStorage);
+const bot = new GonzagueBot(conversationState, userState);
+
+const adapter = new BotFrameworkAdapterFactory(conversationState).createAdapter({
     appId: process.env.MicrosoftAppId,
     appPassword: process.env.MicrosoftAppPassword
 });
-
-const bot = new GonzagueBot();
 
 const port = process.env.port || process.env.PORT || 3978;
 
