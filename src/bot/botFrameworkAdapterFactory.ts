@@ -1,10 +1,10 @@
-import { BotFrameworkAdapter, TurnContext, BotFrameworkAdapterSettings, BotState } from "botbuilder";
+import { BotFrameworkAdapter, BotFrameworkAdapterSettings, BotState, TurnContext } from 'botbuilder';
 
 export class BotFrameworkAdapterFactory {
 
     constructor(private state: BotState) { }
 
-    createAdapter(settings?: Partial<BotFrameworkAdapterSettings>): BotFrameworkAdapter {
+    public createAdapter(settings?: Partial<BotFrameworkAdapterSettings>): BotFrameworkAdapter {
         const adapter = new BotFrameworkAdapter(settings);
         adapter.onTurnError = async (context: TurnContext, error: Error) => {
             console.error(`\n Unhandled onTurn error: ${error}`);

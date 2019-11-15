@@ -1,15 +1,21 @@
+import { ConversationState, MemoryStorage, UserState } from 'botbuilder';
 import * as restify from 'restify';
-import { GonzagueBot } from './gonzagueBot';
-import { configDotenv } from './dotenvLoader';
-import { BotFrameworkAdapterFactory } from './botFrameworkAdapterFactory';
-import { MemoryStorage, ConversationState, UserState } from 'botbuilder';
+import { BotFrameworkAdapterFactory } from './bot/botFrameworkAdapterFactory';
+import { ChoicesResolver } from './bot/choices/choicesResolver';
+import { TakePicChoiceProcessor } from './bot/choices/takePicChoiceProcessor';
+import { MainDialog } from './bot/dialogs/mainDialog';
+import { configDotenv } from './bot/dotenvLoader';
+import { GonzagueBot } from './bot/gonzagueBot';
 
 configDotenv();
+
+const choices = new ChoicesResolver([new TakePicChoiceProcessor()]);
 
 const memoryStorage = new MemoryStorage();
 const conversationState = new ConversationState(memoryStorage);
 const userState = new UserState(memoryStorage);
-const bot = new GonzagueBot(conversationState, userState);
+const dialog = new MainDialog(choices);
+const bot = new GonzagueBot(conversationState, userState, dialog);
 
 const adapter = new BotFrameworkAdapterFactory(conversationState).createAdapter({
     appId: process.env.MicrosoftAppId,
