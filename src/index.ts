@@ -1,15 +1,21 @@
 import { ConversationState, MemoryStorage, UserState } from 'botbuilder';
+import { config } from 'dotenv';
+import * as path from 'path';
 import * as restify from 'restify';
 import { BotFrameworkAdapterFactory } from './bot/botFrameworkAdapterFactory';
 import { ChoicesResolver } from './bot/choices/choicesResolver';
 import { TakePicChoiceProcessor } from './bot/choices/takePicChoiceProcessor';
 import { MainDialog } from './bot/dialogs/mainDialog';
-import { configDotenv } from './bot/dotenvLoader';
 import { GonzagueBot } from './bot/gonzagueBot';
+import { PiCameraAdapter } from './camera/piCameraAdapter';
 
-configDotenv();
+const rootDirectory = path.join(__dirname, '..');
 
-const choices = new ChoicesResolver([new TakePicChoiceProcessor()]);
+config({ path: path.join(rootDirectory, '.env') });
+
+const choices = new ChoicesResolver([
+    new TakePicChoiceProcessor(new PiCameraAdapter(path.join(rootDirectory, 'output_files')))
+]);
 
 const memoryStorage = new MemoryStorage();
 const conversationState = new ConversationState(memoryStorage);
