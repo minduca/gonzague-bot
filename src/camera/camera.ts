@@ -4,6 +4,5 @@ export interface Camera {
 }
 
 export interface TakePictureOptions {
-    notify: (text: string) => Promise<void>;
     lowResolution?: boolean;
 }

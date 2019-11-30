@@ -13,11 +13,17 @@ export class TakePicChoiceProcessor implements ChoiceProcessor {
         };
     }
 
-    public async processChoice(activitySender: ActivitySender): Promise<any> {
-        await this.camera.takePicture({
-            notify: async (text: string) => {
-                await activitySender.sendActivity(text);
+    public async processChoice(activitySender: ActivitySender): Promise<boolean> {
+        try {
+            await this.camera.takePicture();
+            return true;
+        } catch(e) {
+            if (e && e.technicalDetails) {
+                console.error(e.technicalDetails);
             }
-        });
+            const message = (e && e.message) || 'There was an unknown error when trying to take a picture.';
+            await activitySender.sendActivity(message);
+        }
+        return false;
     }
 }

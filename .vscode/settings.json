@@ -2,5 +2,13 @@
     "files.exclude": {
         "node_modules": true,
         "lib": true
-    }
+    },
+    "cSpell.words": [
+        "Chatbot",
+        "cam",
+        "gonzague",
+        "raspi",
+        "raspicam",
+        "raspistill"
+    ]
 }

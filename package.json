@@ -6,9 +6,9 @@
     "license": "",
     "main": "./lib/index.js",
     "scripts": {
-        "build": "tsc --build && npm run lint && node createOutputFolder.js",
+        "build": "tsc --build && node createOutputFolder.js",
         "lint": "tslint -c tslint.json 'src/**/*.ts' --fix",
-        "start": "tsc --build && node ./lib/index.js",
+        "start": "npm run build && node ./lib/index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "nodemon --watch ./src -e ts --exec \"npm run start\""
     },
