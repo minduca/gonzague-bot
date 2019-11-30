@@ -1,4 +1,5 @@
 import * as RaspiCam from 'raspicam';
+import { ErrorMessage } from '../bot/core/errorMessage';
 import { FileNameGenerator } from '../core/fileNameGenerator';
 import { Camera, TakePictureOptions } from './camera';
 
@@ -11,18 +12,20 @@ export class PiCameraAdapter implements Camera {
         const raspistill = new RaspiCam(piOptions);
 
         return new Promise((resolve, reject) => {
-
             let handled = false;
             raspistill.on('start', () => {
                 // on initialization error
                 raspistill.child_process.on('error', (error: any) => {
                     handled = true;
-                    reject({
-                        message: 'There was an error trying to take a picture using raspistill. ' +
+                    const errorMessage: ErrorMessage = {
+                        message: 'There was an error while trying to take a picture using raspistill. ' +
                             'This could happen if you are not running the bot on a Raspberry PI. Otherwise, ' +
                             'confirm that the camera is connected and enabled on the OS.',
                         technicalDetails: error
-                    });
+                    };
+                    if (reject) {
+                        reject(errorMessage);
+                    }
                 });
             });
 
@@ -30,10 +33,12 @@ export class PiCameraAdapter implements Camera {
             raspistill.on('exit', () => {
                 if (!handled) {
                     handled = true;
-                    reject(
-                        'Raspistill timed out trying trying to take a picture. If the error persists, ' +
-                        'set a higher timeout on the code and try again.'
-                    );
+                    if (reject) {
+                        reject(
+                            'Raspistill timed out while trying to take a picture. If the error persists, ' +
+                            'set a higher timeout on the code and try again.'
+                        );
+                    }
                 }
             });
 
@@ -41,7 +46,9 @@ export class PiCameraAdapter implements Camera {
             raspistill.on('stop', () => {
                 if (!handled) {
                     handled = true;
-                    resolve();
+                    if (resolve) {
+                        resolve();
+                    }
                 }
             });
 

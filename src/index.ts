@@ -2,7 +2,10 @@ import { ConversationState, MemoryStorage, UserState } from 'botbuilder';
 import { config } from 'dotenv';
 import * as path from 'path';
 import * as restify from 'restify';
+import { ArduinoSerial } from './arduino/arduinoSerial';
+import { SerialMovementHandler } from './arduino/serialMovementHandler';
 import { BotFrameworkAdapterFactory } from './bot/botFrameworkAdapterFactory';
+import { CheckMovementChoiceProcessor } from './bot/choices/checkMovementChoiceProcessor';
 import { ChoicesResolver } from './bot/choices/choicesResolver';
 import { TakePicChoiceProcessor } from './bot/choices/takePicChoiceProcessor';
 import { MainDialog } from './bot/dialogs/mainDialog';
@@ -14,7 +17,8 @@ const rootDirectory = path.join(__dirname, '..');
 config({ path: path.join(rootDirectory, '.env') });
 
 const choices = new ChoicesResolver([
-    new TakePicChoiceProcessor(new PiCameraAdapter(path.join(rootDirectory, 'output_files')))
+    new TakePicChoiceProcessor(new PiCameraAdapter(path.join(rootDirectory, 'output_files'))),
+    new CheckMovementChoiceProcessor(new SerialMovementHandler(new ArduinoSerial('/dev/ttyACM0', 9600)))
 ]);
 
 const memoryStorage = new MemoryStorage();

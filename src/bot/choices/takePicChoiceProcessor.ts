@@ -1,29 +1,21 @@
 import { Choice } from 'botbuilder-dialogs';
 import { Camera } from '../../camera/camera';
 import { ActivitySender } from '../core/turnContextWrapper';
-import { ChoiceProcessor } from './choiceProcessor';
+import { BasicChoiceProcessor } from './choiceProcessor';
 
-export class TakePicChoiceProcessor implements ChoiceProcessor {
-    constructor(private camera: Camera) { }
+export class TakePicChoiceProcessor extends BasicChoiceProcessor {
+    constructor(private camera: Camera) {
+        super();
+    }
 
     public getChoice(): Choice {
         return {
-            synonyms: ['pic'],
+            synonyms: ['pic', 'picture', 'snapshot', 'photo'],
             value: 'Take a picture'
         };
     }
 
-    public async processChoice(activitySender: ActivitySender): Promise<boolean> {
-        try {
-            await this.camera.takePicture();
-            return true;
-        } catch(e) {
-            if (e && e.technicalDetails) {
-                console.error(e.technicalDetails);
-            }
-            const message = (e && e.message) || 'There was an unknown error when trying to take a picture.';
-            await activitySender.sendActivity(message);
-        }
-        return false;
+    public processChoice(activitySender: ActivitySender): Promise<boolean> {
+        return this.handleResult(activitySender, this.camera.takePicture());
     }
 }

@@ -34,13 +34,13 @@ export class MainDialog extends ComponentDialog {
 
     public async processChoice(step: WaterfallStepContext): Promise<any> {
         const chosenProcessor: ChoiceProcessor = this.choices.getProcessorFor(step.result.value);
-        
-        const message = await chosenProcessor.processChoice(new TurnContextWrapper(step.context)) 
+
+        const message = await chosenProcessor.processChoice(new TurnContextWrapper(step.context))
         ? 'Done! Let me know if there’s anything else I can do to help you.'
         : 'Sorry for not being helpful. I feel ashamed. Let me know if there’s anything else you want to try.';
-        
+
         await step.context.sendActivity(message);
-        
+
         return await step.endDialog();
     }
 
