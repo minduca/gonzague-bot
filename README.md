@@ -30,7 +30,7 @@ Alternatively, you can run the command below on the project root directory.
 npm start
 ```
 
-The bots accepts messages on the following endpoint:
+The bot accepts messages on the following endpoint:
 
 ```bash
 http://localhost:3978/api/messages
@@ -42,7 +42,7 @@ To debug the bot running locally, see Microsoft official documentation [Debug wi
 
 The bot can run on any platform, but Raspberry PI dependent features will be disabled if a different hardware is used.
 
-To debug the bot running remote on the Raspberry PI, configure [Tunneling (ngrok)](https://github.com/Microsoft/BotFramework-Emulator/wiki/Tunneling-(ngrok)).
+To debug the bot running on the Raspberry PI from a remote machine, configure [Tunneling (ngrok)](https://github.com/Microsoft/BotFramework-Emulator/wiki/Tunneling-(ngrok)).
 
 ### Running on a Raspberry PI
 
@@ -52,6 +52,6 @@ No particular setup is required though. There is no OS restriction either.
 
 ### Connect to Arduino
 
-Install [gonzague-arduino](https://github.com/minduca/gonzague-arduino) on the Arduino.
-
-Connect the Raspberry PI to the Arduino via USB port.
+1. Install [gonzague-arduino](https://github.com/minduca/gonzague-arduino) on the Arduino.
+2. Connect the Raspberry PI to the Arduino via USB port.
+3. Start the application.
